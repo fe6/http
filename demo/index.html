@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Water shared demo</title>
+    <script src="https://unpkg.com/lodash@4.17.21/lodash.js"></script>
+    <script src="https://unpkg.com/@fe6/shared@0.11.0/dist/shared.global.js"></script>
+    <script src="https://unpkg.com/axios@0.26.0/dist/axios.min.js"></script>
+    <script src="../dist/http.global.js"></script>
+  </head>
+  <body>
+    <h1>Water shared demo</h1>
+    <p>打开控制台，进行开发调试。</p>
+    <script>
+      console.log(http, 3);
+
+      /**
+       * @description: 数据处理，方便区分多种处理方式
+       */
+      const transform = {
+        transformRequestInner: () => {
+          console.log('=== loading false ===');
+        },
+        /**
+         * @description: 请求拦截器处理
+         */
+        requestInterceptors: (config) => {
+          console.log('=== loading true ===');
+          return config;
+        },
+      };
+
+      const defHttp = () => {
+        const axiosConf = {
+          apiUrl: 'http://localhost:2020/api/',
+          isDevMode: true,
+          errorLog: console.error,
+          errorModal: console.error,
+          errorMsg: console.error,
+        };
+        return http.createTheHttp({
+          ...axiosConf,
+          transform: Object.assign(
+            http.httpTransformHandler(axiosConf),
+            transform,
+          ),
+        });
+      };
+
+      // 调用
+      defHttp()
+        .request({
+          url: 'user', // http://localhost:2020/api/user?page=1
+          method: 'GET',
+          params: {
+            page: 1,
+          },
+        })
+        .then((res) => {
+          console.log(res, 'res');
+        });
+    </script>
+  </body>
+</html>
