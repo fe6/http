@@ -1,6 +1,6 @@
 {
   "name": "@fe6/http",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Axios 二次封装，开箱机用",
   "scripts": {
     "start": "npm-run-all --parallel \"dev\" serve open",
